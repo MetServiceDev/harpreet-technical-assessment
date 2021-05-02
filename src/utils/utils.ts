@@ -42,4 +42,5 @@ export class Utils {
         } else {
             return 'rgb(75, 192, 192)';
         }
+    }
 }
