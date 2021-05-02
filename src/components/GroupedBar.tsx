@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Bar } from 'react-chartjs-2';
+import _ from 'lodash';
+import moment from 'moment';
+import { IJsonDataset } from  '../types/types'
+import jsonData from '../data/data.json';
+import { Utils } from '../utils/utils';
 
-const data = {
-    labels: ['1', '2', '3', '4', '5', '6'],
+const data: IJsonDataset = {
+    labels: [],
     datasets: [
         {
             label: '# of Red Votes',
@@ -22,21 +27,18 @@ const data = {
     ],
 };
 
-const options = {
-    scales: {
-        yAxes: [
-            {
-                ticks: {
-                    beginAtZero: true,
-                },
-            },
-        ],
-    },
-};
-
 const GroupedBar = () => {
+    useEffect(() => {
+        return () => {
+            // add labels and dataset from data file
+            data.labels = _.map(_.keys(jsonData), (label) => {
+               return moment(label).format('YYYY-MM-DD');
+            });
+        };
+    }, []);
+
     return (
-        <Bar data={data} options={options} type={data} />
+        <Bar data={data} options={Utils.getBarChartConfigs()} type={data} />
     );
 }
 
