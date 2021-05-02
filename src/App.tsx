@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import GroupedBar from './components/GroupedBar';
 import MultiAxisLine from './components/MultiAxisLine';
+import CSVMultiAxisLine from './components/CSVMultiAxisLine';
 
 const App = () => {
   return (
@@ -17,7 +18,10 @@ const App = () => {
                   <MultiAxisLine />
               </div>
           </div>
-
+          <h1>CSV data</h1>
+          <div>
+              <CSVMultiAxisLine />
+          </div>
       </div>
   );
 }

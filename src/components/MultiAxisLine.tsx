@@ -41,7 +41,6 @@ const MultiAxisLine = () => {
         }
         // @ts-ignore
         data.datasets.push(datasetForASpecificType);
-        console.log(datasetForASpecificType, 'data set');
     }
 
     return (
