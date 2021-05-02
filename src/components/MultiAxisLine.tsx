@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import _ from 'lodash';
-import moment from 'moment';
 import { IGroupedBarData, IJsonDataset } from  '../types/types'
 import jsonData from '../data/data.json';
 import { Utils } from '../utils/utils';
