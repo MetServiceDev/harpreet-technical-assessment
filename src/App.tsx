@@ -5,7 +5,9 @@ import GroupedBar from './components/GroupedBar';
 const App = () => {
   return (
       <div className="App">
-          <GroupedBar />
+          <div className="grouped-bar">
+              <GroupedBar />
+          </div>
       </div>
   );
 }

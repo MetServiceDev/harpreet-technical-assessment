@@ -8,23 +8,7 @@ import { Utils } from '../utils/utils';
 
 const data: IGroupedBarData = {
     labels: [],
-    datasets: [
-        {
-            label: '# of Red Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: 'rgb(255, 99, 132)',
-        },
-        {
-            label: '# of Blue Votes',
-            data: [2, 3, 20, 5, 1, 4],
-            backgroundColor: 'rgb(54, 162, 235)',
-        },
-        {
-            label: '# of Green Votes',
-            data: [3, 10, 13, 15, 22, 30],
-            backgroundColor: 'rgb(75, 192, 192)',
-        },
-    ],
+    datasets: [],
 };
 
 const GroupedBar = () => {
@@ -34,23 +18,27 @@ const GroupedBar = () => {
            return moment(label).format('YYYY-MM-DD');
         });
 
-        addWaterSpeedDataset('surface_sea_water_speed');
-        addWaterSpeedDataset('sea_surface_wave_maximum_height');
-        addWaterSpeedDataset('sea_surface_wave_from_direction_at_variance_spectral_density_maximum');
+        addDataToGraph('surface_sea_water_speed');
+        addDataToGraph('sea_surface_wave_maximum_height');
+        addDataToGraph('sea_surface_wave_from_direction_at_variance_spectral_density_maximum');
     }, []);
 
-    function addWaterSpeedDataset(type: string): void {
-        const filteredData = _.map(jsonData, (data: IJsonDataset): number => {
+    /**
+     * Add different data to graph
+     * @param {string} type
+     */
+    function addDataToGraph(type: string): void {
+        const filteredDataForSeaSurfaceType = _.map(jsonData, (data: IJsonDataset): number => {
             // @ts-ignore
             return data[type] || 0;
         });
-        const ssWaterSpeedDataset = {
+        const datasetForASpecificType = {
             label: Utils.getLabel(type),
-            data: filteredData,
-            backgroundColor: 'rgb(255, 92, 132)'
+            data: filteredDataForSeaSurfaceType,
+            backgroundColor: Utils.getBackgroundColor(type)
         }
         // @ts-ignore
-        data.datasets.push(ssWaterSpeedDataset);
+        data.datasets.push(datasetForASpecificType);
     }
 
     return (
