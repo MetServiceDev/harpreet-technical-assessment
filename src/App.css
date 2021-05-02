@@ -37,6 +37,6 @@
   }
 }
 
-.grouped-bar {
+.grouped-bar, .multi-axis-line {
   width: 800px;
 }

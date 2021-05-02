@@ -13,3 +13,7 @@ export interface IJsonDataset {
     surface_sea_water_speed?: number;
     sea_surface_wave_maximum_height?: number
 }
+
+export interface IJson {
+    [key: string] : IJsonDataset
+}

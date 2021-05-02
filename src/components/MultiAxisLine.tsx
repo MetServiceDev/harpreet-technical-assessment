@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import _ from 'lodash';
 import moment from 'moment';
 import { IGroupedBarData, IJsonDataset } from  '../types/types'
@@ -11,7 +11,7 @@ const data: IGroupedBarData = {
     datasets: [],
 };
 
-const GroupedBar = () => {
+const MultiAxisLine = () => {
     useEffect(() => {
         // add labels and dataset from data file
         data.labels = Utils.getDataLabels(jsonData);
@@ -33,15 +33,19 @@ const GroupedBar = () => {
         const datasetForASpecificType = {
             label: Utils.getLabel(type),
             data: filteredDataForSeaSurfaceType,
-            backgroundColor: Utils.getBackgroundColor(type)
+            fill: false,
+            backgroundColor: Utils.getBackgroundColor(type),
+            borderColor: Utils.getBorderColor(type),
+            yAxixID: type
         }
         // @ts-ignore
         data.datasets.push(datasetForASpecificType);
+        console.log(datasetForASpecificType, 'data set');
     }
 
     return (
-        <Bar data={data} options={Utils.getBarChartConfigs()} type={data} />
+        <Line data={data} options={Utils.getBarChartConfigs()} type={data} />
     );
 }
 
-export default GroupedBar;
+export default MultiAxisLine;
