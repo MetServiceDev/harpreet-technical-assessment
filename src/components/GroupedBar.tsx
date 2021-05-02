@@ -33,7 +33,8 @@ const GroupedBar = () => {
         const datasetForASpecificType = {
             label: Utils.getLabel(type),
             data: filteredDataForSeaSurfaceType,
-            backgroundColor: Utils.getBackgroundColor(type)
+            backgroundColor: Utils.getBackgroundColor(type),
+            hidden: type !== 'surface_sea_water_speed'
         }
         // @ts-ignore
         data.datasets.push(datasetForASpecificType);

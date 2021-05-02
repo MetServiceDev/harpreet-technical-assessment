@@ -36,7 +36,8 @@ const MultiAxisLine = () => {
             fill: false,
             backgroundColor: Utils.getBackgroundColor(type),
             borderColor: Utils.getBorderColor(type),
-            yAxixID: type
+            yAxixID: type,
+            hidden: type !== 'surface_sea_water_speed'
         }
         // @ts-ignore
         data.datasets.push(datasetForASpecificType);

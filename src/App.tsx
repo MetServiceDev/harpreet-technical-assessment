@@ -7,12 +7,17 @@ const App = () => {
   return (
       <div className="App">
           <h1>JSON data</h1>
-          <div className="grouped-bar">
-              <GroupedBar />
+          <div>
+              <h2>Grouped Bar Graph</h2>
+              <div className="grouped-bar">
+                  <GroupedBar />
+              </div>
+              <h2>Multi Axis Bar Graph</h2>
+              <div className="multi-axis-line">
+                  <MultiAxisLine />
+              </div>
           </div>
-          <div className="multi-axis-line">
-              <MultiAxisLine />
-          </div>
+
       </div>
   );
 }
