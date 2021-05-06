@@ -37,6 +37,6 @@
   }
 }
 
-.grouped-bar, .multi-axis-line {
+.grouped-bar, .multi-axis-line, .height-vs-direction, .direction-vs-speed {
   width: 1300px;
 }

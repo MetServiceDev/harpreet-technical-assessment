@@ -97,7 +97,7 @@ export class Utils {
         }
     }
 
-    static getXAxisLabels(data: IMergedData) {
+    static getXAxisLabels(data: IMergedData): string[] {
         return _.map(_.keys(data), (label) => {
             return moment(label).format('YYYY-MM-DD');
         });
