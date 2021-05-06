@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import moment from 'moment';
-import { ICSVData, IJson } from '../types/types';
+import { ICSVData, IMergedData } from '../types/types';
 
 export class Utils {
     /**
@@ -97,8 +97,8 @@ export class Utils {
         }
     }
 
-    static getDataLabels(jsonData: IJson) {
-        return _.map(_.keys(jsonData), (label) => {
+    static getXAxisLabels(data: IMergedData) {
+        return _.map(_.keys(data), (label) => {
             return moment(label).format('YYYY-MM-DD');
         });
     }
@@ -118,5 +118,17 @@ export class Utils {
             }
         });
         return formattedCSVData
+    }
+
+    /**
+     * Get data for a specific field in an array for a specific type
+     * @param {IMergedData} data
+     * @param {string} type
+     */
+    static filterDataForAType(data: IMergedData, type: string): number[] {
+        return _.map(data, (data) => {
+            // @ts-ignore
+            return data[type] || 0;
+        })
     }
 }

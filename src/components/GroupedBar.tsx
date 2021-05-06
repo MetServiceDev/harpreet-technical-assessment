@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
 import { Bar } from 'react-chartjs-2';
 import _ from 'lodash';
-import moment from 'moment';
-import { IGroupedBarData, IJsonDataset } from  '../types/types'
+import { IChartJsData, IJsonDataset } from '../types/types'
 import jsonData from '../data/data.json';
 import { Utils } from '../utils/utils';
 
-const data: IGroupedBarData = {
+const data: IChartJsData = {
     labels: [],
     datasets: [],
 };
@@ -14,7 +13,8 @@ const data: IGroupedBarData = {
 const GroupedBar = () => {
     useEffect(() => {
         // add labels and dataset from data file
-        data.labels = Utils.getDataLabels(jsonData);
+        // @ts-ignore
+        data.labels = Utils.getXAxisLabels(jsonData);
 
         addDataToGraph('surface_sea_water_speed');
         addDataToGraph('sea_surface_wave_maximum_height');

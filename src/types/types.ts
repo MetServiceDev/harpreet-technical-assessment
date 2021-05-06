@@ -1,11 +1,14 @@
-export interface IGroupedBarDataset {
+export interface IChartJsDataset {
     label: string;
     data: number[];
     backgroundColor: string;
+    fill?: boolean;
+    borderColor?: string;
+    yAxisId?: string;
 }
-export interface IGroupedBarData {
+export interface IChartJsData {
     labels: string[];
-    datasets: IGroupedBarDataset[];
+    datasets: IChartJsDataset[];
 }
 
 export interface IJsonDataset {
@@ -27,4 +30,10 @@ export interface ICSVDataset {
 
 export interface ICSVData {
     [key: string]: ICSVDataset;
+}
+
+export interface IMergedData extends IJsonDataset, ICSVDataset { }
+
+export interface IMergedDataset {
+    [key: string]: IMergedData;
 }

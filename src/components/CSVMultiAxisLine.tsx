@@ -1,28 +1,16 @@
 import React, { ChangeEventHandler } from 'react';
 import Papa from 'papaparse';
 import _ from 'lodash';
-import { IGroupedBarData } from '../types/types';
+import { IChartJsDataset, IChartJsData, IMergedData } from '../types/types';
 import { Utils } from '../utils/utils';
 import { Line } from 'react-chartjs-2';
 import jsonData from '../data/data.json';
 
 const CSVMultiAxisLine: React.FC = () => {
     let file:any = null;
-    // let labels: string[] = [];
-    // let waveSignificantHeight: string[] = [];
-    // let airTempratureAt2m: string[] = [];
-    // let windDirectionAt10m: string[] = [];
-    // let windSpeedat10m: string[] = [];
     let configs;
 
-    const data: IGroupedBarData = {
-        labels: [],
-        datasets: [],
-    };
-
-    //use state to show/hide graph
-    const [showgraph, setShowGraph] = React.useState<boolean>(false)
-    const onClick = () => setShowGraph(true)
+    const [waveHeightVsDirectionData, setWaveHeightVsDirectionData] = React.useState<IChartJsData>({labels: [], datasets: []})
 
     // @ts-ignore
     const handleChange = (event: ChangeEventHandler<HTMLInputElement>): void => {
@@ -30,18 +18,15 @@ const CSVMultiAxisLine: React.FC = () => {
         file = event.target.files[0];
     };
 
-    function addDataToGraph(type: string, datum: string[]) {
-        const datasetForASpecificType = {
+    function getFormattedDataset(datum: number[], type: string): IChartJsDataset {
+        return {
             label: Utils.getLabel(type),
             data: datum,
             fill: false,
             backgroundColor: Utils.getBackgroundColor(type),
             borderColor: Utils.getBorderColor(type),
-            yAxixID: type,
-            hidden: type !== 'surface_sea_water_speed'
+            yAxisId: type,
         }
-        // @ts-ignore
-        data.datasets.push(datasetForASpecificType);
     }
 
     const importCSV = () => {
@@ -52,36 +37,29 @@ const CSVMultiAxisLine: React.FC = () => {
             complete: function(responses: any) {
                 // csv data
                 const data: string[] = responses.data;
+                data.shift();
                 const formattedCSVData = Utils.convertCSVToJSONFormat(data);
-                const mergedData = _.merge(formattedCSVData, jsonData);
-                console.log(mergedData);
                 // merge with json data
+                // @ts-ignore
+                const mergedData: IMergedData = _.merge(formattedCSVData, jsonData);
 
-                // data.shift();
-                // labels = _.map(data, (datum) => {
-                //     return datum[0];
-                // });
-                // waveSignificantHeight = _.map(data, (datum) => {
-                //     return datum[1] || 0;
-                // });
-                // airTempratureAt2m = _.map(data, (datum) => {
-                //     return datum[2] || 0;
-                // });
-                // windDirectionAt10m = _.map(data, (datum) => {
-                //     return datum[3] || 0;
-                // });
-                // windSpeedat10m = _.map(data, (datum) => {
-                //     return datum[4] || 0;
-                // });
-                //
-                // addDataToGraph('sea_surface_wave_significant_height', waveSignificantHeight);
-                // addDataToGraph('air_temprature_at_2m_above_ground_level', airTempratureAt2m);
-                // addDataToGraph('wind_from_direction_at_10m_above_ground_level', windDirectionAt10m);
-                // addDataToGraph('wind_speed_at_10m_above_ground_level', windSpeedat10m);
-                // configs = Utils.getBarChartConfigs();
-                // // show graph
-                // onClick();
-                // console.log(configs, 'configs');
+                const waveHeightVsDirectionDataset: IChartJsDataset[] = [];
+                // get labels
+                const labels = Utils.getXAxisLabels(mergedData);
+
+                // get wave height data formatted for chart
+                const waveHeight = Utils.filterDataForAType(mergedData, 'sea_surface_wave_maximum_height')
+                const waveHeightData = getFormattedDataset(waveHeight, 'sea_surface_wave_maximum_height');
+                waveHeightVsDirectionDataset.push(waveHeightData);
+
+                // get wave direction data formatted for chart
+                const waveDirection = Utils.filterDataForAType(mergedData, 'sea_surface_wave_from_direction_at_variance_spectral_density_maximum');
+                const waveDirectionData = getFormattedDataset(waveDirection, 'sea_surface_wave_from_direction_at_variance_spectral_density_maximum');
+                waveHeightVsDirectionDataset.push(waveDirectionData);
+
+                // get graph configs
+                configs = Utils.getBarChartConfigs();
+                setWaveHeightVsDirectionData({ labels, datasets: waveHeightVsDirectionDataset });
             }
         });
     };
@@ -94,8 +72,7 @@ const CSVMultiAxisLine: React.FC = () => {
                 <input type="file" onChange={handleChange} />
                 <button className="btn btn-primary" onClick={importCSV}>Show Graph</button>
             </div>
-            { showgraph ? <Line data={data} options={configs} type={data} /> : null }
-
+            <Line data={waveHeightVsDirectionData} options={configs} type={waveHeightVsDirectionData} />
         </div>
     )
 }
