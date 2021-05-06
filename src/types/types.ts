@@ -5,6 +5,7 @@ export interface IChartJsDataset {
     fill?: boolean;
     borderColor?: string;
     yAxisId?: string;
+    type?: string;
 }
 export interface IChartJsData {
     labels: string[];

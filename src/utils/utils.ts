@@ -17,6 +17,33 @@ export class Utils {
                     },
                 ],
             },
+            // tooltips: {
+            //     enabled: false,
+            //     mode: "x",
+            //     intersect: false,
+            //     // @ts-ignore
+            //     custom: (tooltipModel) => {
+            //         // hide the tooltip
+            //         if (tooltipModel.opacity === 0) {
+            //             // @ts-ignore
+            //             this.hide();
+            //             return;
+            //         }
+            //         // @ts-ignore
+            //         const position = this.refs.chart.chart_instance.chart.canvas.getBoundingClientRect();
+            //
+            //         // set position of tooltip
+            //         const left = position.left + tooltipModel.caretX;
+            //         const top = position.top + tooltipModel.caretY;
+            //
+            //         // set values
+            //         const date = Math.random(); // tooltipModel.dataPoints[0].xLabel;
+            //         const valueNew = 2; // tooltipModel.dataPoints[0].yLabel;
+            //         const valueOld = 3; // tooltipModel.dataPoints[1].yLabel;
+            //
+            //         this.setPositionAndData({top, left, date, valueNew, valueOld});
+            //     },
+            // }
         };
     }
 
@@ -99,7 +126,7 @@ export class Utils {
 
     static getXAxisLabels(data: IMergedData): string[] {
         return _.map(_.keys(data), (label) => {
-            return moment(label).format('YYYY-MM-DD');
+            return moment(label).format('YYYY-MM-DD HH:MM');
         });
     }
 
