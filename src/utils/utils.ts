@@ -17,33 +17,34 @@ export class Utils {
                     },
                 ],
             },
-            // tooltips: {
-            //     enabled: false,
-            //     mode: "x",
-            //     intersect: false,
-            //     // @ts-ignore
-            //     custom: (tooltipModel) => {
-            //         // hide the tooltip
-            //         if (tooltipModel.opacity === 0) {
-            //             // @ts-ignore
-            //             this.hide();
-            //             return;
-            //         }
-            //         // @ts-ignore
-            //         const position = this.refs.chart.chart_instance.chart.canvas.getBoundingClientRect();
-            //
-            //         // set position of tooltip
-            //         const left = position.left + tooltipModel.caretX;
-            //         const top = position.top + tooltipModel.caretY;
-            //
-            //         // set values
-            //         const date = Math.random(); // tooltipModel.dataPoints[0].xLabel;
-            //         const valueNew = 2; // tooltipModel.dataPoints[0].yLabel;
-            //         const valueOld = 3; // tooltipModel.dataPoints[1].yLabel;
-            //
-            //         this.setPositionAndData({top, left, date, valueNew, valueOld});
-            //     },
-            // }
+            tooltips: {
+                enabled: false,
+                mode: "x",
+                intersect: false,
+                // @ts-ignore
+                custom: (tooltipModel) => {
+
+                    // hide the tooltip
+                    // if (tooltipModel.opacity === 0) {
+                    //     // @ts-ignore
+                    //     this.hide();
+                    //     return;
+                    // }
+                    // // @ts-ignore
+                    // const position = this.refs.chart.chart_instance.chart.canvas.getBoundingClientRect();
+                    //
+                    // // set position of tooltip
+                    // const left = position.left + tooltipModel.caretX;
+                    // const top = position.top + tooltipModel.caretY;
+                    //
+                    // // set values
+                    // const date = Math.random(); // tooltipModel.dataPoints[0].xLabel;
+                    // const valueNew = 2; // tooltipModel.dataPoints[0].yLabel;
+                    // const valueOld = 3; // tooltipModel.dataPoints[1].yLabel;
+                    //
+                    // this.setPositionAndData({top, left, date, valueNew, valueOld});
+                },
+            }
         };
     }
 
@@ -157,5 +158,15 @@ export class Utils {
             // @ts-ignore
             return data[type] || 0;
         })
+    }
+
+    /**
+     * Convert a number to compass direction
+     * @param {number} num
+     */
+    static degToCompass(num: number) {
+        const val = Math.floor((num / 22.5) + 0.5);
+        const arr = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+        return arr[(val % 16)];
     }
 }
