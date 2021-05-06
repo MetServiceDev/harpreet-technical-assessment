@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import moment from 'moment';
-import { IJson } from '../types/types';
+import { ICSVData, IJson } from '../types/types';
 
 export class Utils {
     /**
@@ -101,5 +101,22 @@ export class Utils {
         return _.map(_.keys(jsonData), (label) => {
             return moment(label).format('YYYY-MM-DD');
         });
+    }
+
+    /**
+     * Convert CSV data returned from papaparse to json data format of time as key and object contain different values
+     * @param {string[]} data
+     */
+    static convertCSVToJSONFormat(data: string[]): ICSVData {
+        let formattedCSVData: ICSVData = {};
+        _.map(data, (datum) => {
+            formattedCSVData[datum[0]] = {
+                sea_surface_wave_significant_height: Number(datum[1]) || 0,
+                air_temperature_at_2m_above_ground_level: Number(datum[2]) || 0,
+                wind_from_direction_at_10m_above_ground_level: Number(datum[3]) || 0,
+                wind_speed_at_10m_above_ground_level: Number(datum[4]) || 0,
+            }
+        });
+        return formattedCSVData
     }
 }

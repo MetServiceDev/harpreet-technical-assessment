@@ -4,14 +4,15 @@ import _ from 'lodash';
 import { IGroupedBarData } from '../types/types';
 import { Utils } from '../utils/utils';
 import { Line } from 'react-chartjs-2';
+import jsonData from '../data/data.json';
 
 const CSVMultiAxisLine: React.FC = () => {
     let file:any = null;
-    let labels: string[] = [];
-    let waveSignificantHeight: string[] = [];
-    let airTempratureAt2m: string[] = [];
-    let windDirectionAt10m: string[] = [];
-    let windSpeedat10m: string[] = [];
+    // let labels: string[] = [];
+    // let waveSignificantHeight: string[] = [];
+    // let airTempratureAt2m: string[] = [];
+    // let windDirectionAt10m: string[] = [];
+    // let windSpeedat10m: string[] = [];
     let configs;
 
     const data: IGroupedBarData = {
@@ -49,33 +50,38 @@ const CSVMultiAxisLine: React.FC = () => {
             chunkSize: 3,
             header: false,
             complete: function(responses: any) {
-                // display Graph
-                const data = responses.data;
-                data.shift();
-                labels = _.map(data, (datum) => {
-                    return datum[0];
-                });
-                waveSignificantHeight = _.map(data, (datum) => {
-                    return datum[1] || 0;
-                });
-                airTempratureAt2m = _.map(data, (datum) => {
-                    return datum[2] || 0;
-                });
-                windDirectionAt10m = _.map(data, (datum) => {
-                    return datum[3] || 0;
-                });
-                windSpeedat10m = _.map(data, (datum) => {
-                    return datum[4] || 0;
-                });
+                // csv data
+                const data: string[] = responses.data;
+                const formattedCSVData = Utils.convertCSVToJSONFormat(data);
+                const mergedData = _.merge(formattedCSVData, jsonData);
+                console.log(mergedData);
+                // merge with json data
 
-                addDataToGraph('sea_surface_wave_significant_height', waveSignificantHeight);
-                addDataToGraph('air_temprature_at_2m_above_ground_level', airTempratureAt2m);
-                addDataToGraph('wind_from_direction_at_10m_above_ground_level', windDirectionAt10m);
-                addDataToGraph('wind_speed_at_10m_above_ground_level', windSpeedat10m);
-                configs = Utils.getBarChartConfigs();
-                // show graph
-                onClick();
-                console.log(configs, 'configs');
+                // data.shift();
+                // labels = _.map(data, (datum) => {
+                //     return datum[0];
+                // });
+                // waveSignificantHeight = _.map(data, (datum) => {
+                //     return datum[1] || 0;
+                // });
+                // airTempratureAt2m = _.map(data, (datum) => {
+                //     return datum[2] || 0;
+                // });
+                // windDirectionAt10m = _.map(data, (datum) => {
+                //     return datum[3] || 0;
+                // });
+                // windSpeedat10m = _.map(data, (datum) => {
+                //     return datum[4] || 0;
+                // });
+                //
+                // addDataToGraph('sea_surface_wave_significant_height', waveSignificantHeight);
+                // addDataToGraph('air_temprature_at_2m_above_ground_level', airTempratureAt2m);
+                // addDataToGraph('wind_from_direction_at_10m_above_ground_level', windDirectionAt10m);
+                // addDataToGraph('wind_speed_at_10m_above_ground_level', windSpeedat10m);
+                // configs = Utils.getBarChartConfigs();
+                // // show graph
+                // onClick();
+                // console.log(configs, 'configs');
             }
         });
     };
