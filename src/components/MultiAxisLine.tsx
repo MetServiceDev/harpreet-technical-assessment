@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import _ from 'lodash';
-import { IChartJsData, IJsonDataset } from  '../types/types'
+import { DatasetVariables, IChartJsData, IJsonDataset } from  '../types/types'
 import jsonData from '../data/data.json';
 import { Utils } from '../utils/utils';
 
@@ -16,28 +16,28 @@ const MultiAxisLine = () => {
         // @ts-ignore
         data.labels = Utils.getXAxisLabels(jsonData);
 
-        addDataToGraph('surface_sea_water_speed');
-        addDataToGraph('sea_surface_wave_maximum_height');
-        addDataToGraph('sea_surface_wave_from_direction_at_variance_spectral_density_maximum');
+        addDataToGraph(DatasetVariables.surface_sea_water_speed);
+        addDataToGraph(DatasetVariables.sea_surface_wave_maximum_height);
+        addDataToGraph(DatasetVariables.sea_surface_wave_from_direction_at_variance_spectral_density_maximum);
     }, []);
 
     /**
      * Add different data to graph
      * @param {string} type
      */
-    function addDataToGraph(type: string): void {
+    function addDataToGraph(type: DatasetVariables): void {
         const filteredDataForSeaSurfaceType = _.map(jsonData, (data: IJsonDataset): number => {
             // @ts-ignore
             return data[type] || 0;
         });
         const datasetForASpecificType = {
-            label: Utils.getLabel(type),
+            label: Utils.getLabel(type as DatasetVariables),
             data: filteredDataForSeaSurfaceType,
             fill: false,
             backgroundColor: Utils.getBackgroundColor(type),
             borderColor: Utils.getBorderColor(type),
             yAxixID: type,
-            hidden: type !== 'surface_sea_water_speed'
+            hidden: type !== DatasetVariables.surface_sea_water_speed
         }
         // @ts-ignore
         data.datasets.push(datasetForASpecificType);

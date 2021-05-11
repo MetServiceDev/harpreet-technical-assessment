@@ -1,7 +1,11 @@
 import _ from 'lodash';
 import moment from 'moment';
-import { ICSVData, IMergedData } from '../types/types';
+import { ICSVData, IMergedData, DatasetVariables } from '../types/types';
 
+
+const assertNever = (value: never) => {
+    throw new Error(`Value "${value}" should not be reachable`);
+}
 export class Utils {
     /**
      * Get grouped bar chart config
@@ -79,46 +83,51 @@ export class Utils {
      * Get label for a specific sea surface variation
      * @param {string} type
      */
-    static getLabel(type: string) {
-        if (type === 'surface_sea_water_speed') {
-            return 'Sea surface water speed';
-        } else if (type === 'sea_surface_wave_maximum_height') {
-            return 'Sea surface wave height(max)';
-        } else if ('sea_surface_wave_from_direction_at_variance_spectral_density_maximum') {
-            return 'Sea surface wave direction';
-        } else if (type === 'sea_surface_wave_significant_height') {
-            return 'Sea surface wave significant height';
-        } else if (type === 'air_temprature_at_2m_above_ground_level') {
-            return 'Air temprature 2m above ground level';
-        } else if (type === 'wind_from_direction_at_10m_above_ground_level') {
-            return 'Wind direction 10m above ground level';
-        } else {
-            return 'Wind speed 10m above ground level';
+    static getLabel(type: DatasetVariables): string {
+        switch (type) {
+            case DatasetVariables.surface_sea_water_speed: {
+                return 'Sea surface water speed';
+            } case DatasetVariables.sea_surface_wave_maximum_height: {
+                return 'Sea surface wave height(max)';
+            } case DatasetVariables.sea_surface_wave_from_direction_at_variance_spectral_density_maximum: {
+                return 'Sea surface wave direction';
+            } case DatasetVariables.sea_surface_wave_significant_height: {
+                return 'Sea surface wave significant height';
+            } case DatasetVariables.air_temperature_at_2m_above_ground_level: {
+                return 'Air temperature 2m above ground level';
+            } case DatasetVariables.wind_from_direction_at_10m_above_ground_level: {
+                return 'Wind direction 10m above ground level';
+            } case DatasetVariables.wind_speed_at_10m_above_ground_level: {
+                return 'Wind speed 10m above ground level';
+            } default: {
+                assertNever(type);
+            }
         }
+        return `${type} was not recognised`;
     }
 
     /**
      * Get background colour for a type in grouped bar graph
      * @param {string} type
      */
-    static getBackgroundColor(type: string) {
-        if (type === 'surface_sea_water_speed' || type === 'sea_surface_wave_significant_height') {
+    static getBackgroundColor(type: DatasetVariables) {
+        if (type === DatasetVariables.surface_sea_water_speed || type === DatasetVariables.sea_surface_wave_significant_height) {
             return 'rgb(255, 99, 132)';
-        } else if (type === 'sea_surface_wave_maximum_height' || type === 'air_temprature_at_2m_above_ground_level') {
+        } else if (type === DatasetVariables.sea_surface_wave_maximum_height || type === DatasetVariables.air_temperature_at_2m_above_ground_level) {
             return 'rgb(54, 162, 235)';
-        } else if(type === 'sea_surface_wave_from_direction_at_variance_spectral_density_maximum' || type === 'wind_from_direction_at_10m_above_ground_level') {
+        } else if (type === DatasetVariables.sea_surface_wave_from_direction_at_variance_spectral_density_maximum || type === DatasetVariables.wind_from_direction_at_10m_above_ground_level) {
             return 'rgb(75, 192, 192)';
         } else {
             return 'rgb(144, 62, 200)';
         }
     }
 
-    static getBorderColor(type: string) {
-        if (type === 'surface_sea_water_speed' || type === 'sea_surface_wave_significant_height') {
+    static getBorderColor(type: DatasetVariables) {
+        if (type === DatasetVariables.surface_sea_water_speed || type === DatasetVariables.sea_surface_wave_significant_height) {
             return 'rgb(255, 99, 132, .2)';
-        } else if (type === 'sea_surface_wave_maximum_height' || type === 'air_temprature_at_2m_above_ground_level') {
+        } else if (type === DatasetVariables.sea_surface_wave_maximum_height || type === DatasetVariables.air_temperature_at_2m_above_ground_level) {
             return 'rgb(54, 162, 235, .2)';
-        } else if(type === 'sea_surface_wave_from_direction_at_variance_spectral_density_maximum' || type === 'wind_from_direction_at_10m_above_ground_level') {
+        } else if (type === DatasetVariables.sea_surface_wave_from_direction_at_variance_spectral_density_maximum || type === DatasetVariables.wind_from_direction_at_10m_above_ground_level) {
             return 'rgb(75, 192, 192, .2)';
         } else {
             return 'rgb(144, 62, 200, .2)';
@@ -153,7 +162,7 @@ export class Utils {
      * @param {IMergedData} data
      * @param {string} type
      */
-    static filterDataForAType(data: IMergedData, type: string): number[] {
+    static filterDataForAType(data: IMergedData, type: DatasetVariables): number[] {
         return _.map(data, (data) => {
             // @ts-ignore
             return data[type] || 0;
