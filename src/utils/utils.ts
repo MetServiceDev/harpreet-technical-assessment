@@ -1,6 +1,5 @@
-import _ from 'lodash';
 import moment from 'moment';
-import { ICSVData, IMergedData, DatasetVariables } from '../types/types';
+import { ICSVData, IMergedData, DatasetVariables, IMergedDataset } from '../types/types';
 
 
 const assertNever = (value: never) => {
@@ -135,9 +134,7 @@ export class Utils {
     }
 
     static getXAxisLabels(data: IMergedData): string[] {
-        return _.map(_.keys(data), (label) => {
-            return moment(label).format('YYYY-MM-DD HH:MM');
-        });
+        return Object.keys(data).map((label) => moment(label).format('YYYY-MM-DD HH:MM'));
     }
 
     /**
@@ -145,16 +142,15 @@ export class Utils {
      * @param {string[]} data
      */
     static convertCSVToJSONFormat(data: string[]): ICSVData {
-        let formattedCSVData: ICSVData = {};
-        _.map(data, (datum) => {
-            formattedCSVData[datum[0]] = {
+        return data.reduce((allDatums: ICSVData, datum: string) => {
+            allDatums[datum[0]] = {
                 sea_surface_wave_significant_height: Number(datum[1]) || 0,
                 air_temperature_at_2m_above_ground_level: Number(datum[2]) || 0,
                 wind_from_direction_at_10m_above_ground_level: Number(datum[3]) || 0,
                 wind_speed_at_10m_above_ground_level: Number(datum[4]) || 0,
             }
-        });
-        return formattedCSVData
+            return allDatums;
+        }, {});
     }
 
     /**
@@ -162,10 +158,9 @@ export class Utils {
      * @param {IMergedData} data
      * @param {string} type
      */
-    static filterDataForAType(data: IMergedData, type: DatasetVariables): number[] {
-        return _.map(data, (data) => {
-            // @ts-ignore
-            return data[type] || 0;
+    static filterDataForAType(data: IMergedDataset, type: DatasetVariables): number[] {
+        return Object.values(data).map((data) => {
+            return data[type] ?? 0;
         })
     }
 

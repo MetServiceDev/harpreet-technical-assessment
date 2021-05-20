@@ -40,11 +40,11 @@ export interface ICSVDataset {
 }
 
 export interface ICSVData {
-    [key: string]: ICSVDataset;
+    [timestamp: string]: ICSVDataset;
 }
 
 export interface IMergedData extends IJsonDataset, ICSVDataset { }
 
 export interface IMergedDataset {
-    [key: string]: IMergedData;
+    [timestamp: string]: IMergedData;
 }
